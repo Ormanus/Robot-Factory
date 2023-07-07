@@ -7,8 +7,21 @@ public class GathererBot : MonoBehaviour
 {
     int state = 0; // 0 = idle, 1 = move to resource, 2 = gather resource, 3 = return to base
     GameObject _resourceTarget = null;
+    AnimationController _anim;
     public float gatherTime = 5f;
     float resourceGatherTimer = 0f;
+    
+    string _resourceName;
+    int _resourceAmount;
+
+    public AnimationController.AnimationList idleAnimation;
+    public AnimationController.AnimationList FightAnimation;
+
+    private void Awake()
+    {
+        _anim = GetComponent<AnimationController>();
+        _anim.SetAnimationState(idleAnimation);
+    }
 
     public void SetResourceTarget(GameObject resourceTarget)
     {
@@ -21,14 +34,15 @@ public class GathererBot : MonoBehaviour
         {
             if (Selectable.selected == GetComponent<Selectable>())
             {
-                Vector3 targetPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                Vector2 targetPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
-                var objects = FindObjectsOfType<GameObject>();
+                var objects = FindObjectsOfType<ResourceSource>();
                 foreach (var item in objects)
                 {
-                    if (item.name == "resource" && (targetPos - item.transform.position).magnitude < 1f)
+                    if ((targetPos - (Vector2)item.transform.position).magnitude < 2f)
                     {
-                        _resourceTarget = item;
+                        Debug.Log("Target found!");
+                        _resourceTarget = item.gameObject;
                         GetComponent<RobotMovement>().SetTarget(_resourceTarget.transform.position);
                         state = 1;
                         break;
@@ -42,7 +56,10 @@ public class GathererBot : MonoBehaviour
             Vector3 delta = (_resourceTarget.transform.position - transform.position);
             if (delta.magnitude < 2)
             {
+                Debug.Log("Stopped");
+                GetComponent<RobotMovement>().Stop();
                 state = 2;
+                _anim.SetAnimationState(FightAnimation);
             }
         }
         if (state == 2)
@@ -50,6 +67,9 @@ public class GathererBot : MonoBehaviour
             resourceGatherTimer += Time.deltaTime;
             if (resourceGatherTimer > gatherTime)
             {
+                var res = _resourceTarget.GetComponent<ResourceSource>();
+                _resourceName = res.resourceName;
+                _resourceAmount = res.TakeResource(15);
                 resourceGatherTimer = 0f;
                 state = 3;
             }
@@ -57,6 +77,7 @@ public class GathererBot : MonoBehaviour
         if (state == 3)
         {
             // TODO: Find closest building, move
+            _anim.SetAnimationState(idleAnimation);
             Debug.Log("Resources gathered!");
         }
     }

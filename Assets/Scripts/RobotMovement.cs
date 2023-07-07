@@ -6,6 +6,7 @@ public class RobotMovement : MonoBehaviour
 {
     public float movementSpeed = 1.0f;
     public GameObject targetAnimation;
+    public AnimationController.AnimationList walkAnimation;
 
     int state = 0;
     Vector2 _target;
@@ -23,6 +24,7 @@ public class RobotMovement : MonoBehaviour
             {
                 state = 1;
                 _target = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                GetComponent<AnimationController>().SetAnimationState(walkAnimation);
                 if (targetAnimation != null)
                 {
                     Instantiate(targetAnimation, _target, Quaternion.identity);
@@ -36,10 +38,11 @@ public class RobotMovement : MonoBehaviour
             if (delta.magnitude > 0.5f)
             {
                 transform.position += delta.normalized * movementSpeed * Time.deltaTime;
+                transform.localEulerAngles = new Vector3(0f, 0f, Vector2.SignedAngle(Vector2.up, delta));
             }
             else
             {
-                state = 0;
+                Stop();
             }
         }
     }
@@ -52,6 +55,7 @@ public class RobotMovement : MonoBehaviour
 
     public void Stop()
     {
+        GetComponent<AnimationController>().Stop();
         state = 0;
     }
 }

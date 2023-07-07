@@ -50,4 +50,9 @@ public class AnimationController : MonoBehaviour
             sr.sprite = animationState.sprites[spriteIndex];
         }
     }
+
+    public void Stop()
+    {
+        animationState = null;
+    }
 }

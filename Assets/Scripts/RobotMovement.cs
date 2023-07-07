@@ -8,11 +8,11 @@ public class RobotMovement : MonoBehaviour
     public GameObject targetAnimation;
 
     int state = 0;
-    Vector2 target;
+    Vector2 _target;
 
     private void Awake()
     {
-        target = transform.position;
+        _target = transform.position;
     }
 
     private void Update()
@@ -22,17 +22,17 @@ public class RobotMovement : MonoBehaviour
             if (Selectable.selected == GetComponent<Selectable>())
             {
                 state = 1;
-                target = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                _target = Camera.main.ScreenToWorldPoint(Input.mousePosition);
                 if (targetAnimation != null)
                 {
-                    Instantiate(targetAnimation, target, Quaternion.identity);
+                    Instantiate(targetAnimation, _target, Quaternion.identity);
                 }
             }
         }
 
         if (state == 1)
         {
-            Vector3 delta = ((Vector3)target - transform.position);
+            Vector3 delta = ((Vector3)_target - transform.position);
             if (delta.magnitude > 0.5f)
             {
                 transform.position += delta.normalized * movementSpeed * Time.deltaTime;
@@ -42,5 +42,16 @@ public class RobotMovement : MonoBehaviour
                 state = 0;
             }
         }
+    }
+
+    public void SetTarget(Vector2 target)
+    {
+        _target = target;
+        state = 1;
+    }
+
+    public void Stop()
+    {
+        state = 0;
     }
 }

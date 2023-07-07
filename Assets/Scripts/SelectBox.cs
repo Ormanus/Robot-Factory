@@ -8,21 +8,19 @@ public class SelectBox : MonoBehaviour
 
     private void Awake()
     {
-        Selectable.OnSelect.AddListener(Select);
         spriteRenderer = GetComponent<SpriteRenderer>();
         spriteRenderer.enabled = false;
     }
 
-    void Select(Selectable obj)
+    private void Update()
     {
-        if (obj == null) 
+        if (Selectable.selected == null)
         {
             spriteRenderer.enabled = false;
+            return;
         }
-        else
-        {
-            spriteRenderer.enabled = true;
-            transform.position = obj.transform.position;
-        }
+
+        spriteRenderer.enabled = true;
+        transform.position = Selectable.selected.transform.position;
     }
 }

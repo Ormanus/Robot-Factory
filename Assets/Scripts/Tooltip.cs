@@ -4,15 +4,23 @@ using UnityEngine;
 
 public class Tooltip : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    public TMPro.TextMeshProUGUI text;
+
+    private void Awake()
     {
-        
+        Selectable.OnSelect.AddListener(OnSelect);
+        text.text = "";
     }
 
-    // Update is called once per frame
-    void Update()
+    void OnSelect(Selectable obj)
     {
-        
+        if (obj != null)
+        {
+            text.text = obj.description;
+        }
+        else
+        {
+            text.text = "";
+        }
     }
 }

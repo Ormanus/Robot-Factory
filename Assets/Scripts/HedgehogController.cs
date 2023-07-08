@@ -6,14 +6,15 @@ public class HedgehogController : MonoBehaviour
 {
     AnimationController controller;
 
-    AnimationController.AnimationList animationIdle;
-    AnimationController.AnimationList animationRun;
-    AnimationController.AnimationList animationAttack;
+    public AnimationController.AnimationList animationIdle;
+    public AnimationController.AnimationList animationRun;
+    public AnimationController.AnimationList animationAttack;
 
     enum HedgehogState
     {
         Idle,
         Run,
+        Charge,
         Attack
     }
     HedgehogState hedgehogState;

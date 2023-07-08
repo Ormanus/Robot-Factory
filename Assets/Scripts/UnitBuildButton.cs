@@ -16,19 +16,31 @@ public class UnitBuildButton : MonoBehaviour
     public void Init(UnitData.Unit unit)
     {
         _unit = unit;
-        metalPrice.text = unit.metalCost.ToString();
-        padsPrice.text = unit.padsCost.ToString();
-        electricityPrice.text = unit.electricityCost.ToString();
+        metalPrice.text = GetCost("metal").ToString();
+        padsPrice.text = GetCost("gamepads").ToString();
+        electricityPrice.text = GetCost("electricity").ToString();
         constructionTime.text = unit.constructionTime.ToString();
         icon.sprite = unit.icon;
+    }
+
+    public int GetCost(string res)
+    {
+        for (int i = 0; i < _unit.resourceCosts.Length; i++)
+        {
+            if (_unit.resourceCosts[i].Item1 == res)
+            {
+                return _unit.resourceCosts[i].Item2;
+            }
+        }
+        return 0;
     }
 
     public void Build()
     {
         // TODO: check for a robot factory, add _unit to Q
-        if (Selectable.selected.TryGetComponent<Building>(out var building))
+        if (Selectable.selected.TryGetComponent<RobotConstructionLine>(out var building))
         {
-            building.Terminate();
+            building.AddRobotToQueue(_unit);
         }
     }
 }

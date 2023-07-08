@@ -7,10 +7,8 @@ public class UnitData : ScriptableObject
     public struct Unit
     {
         public string name;
-        public int metalCost;
-        public int padsCost;
-        public int electricityCost;
-        public int constructionTime;
+        public (string, int)[] resourceCosts;
+        public float constructionTime;
         public Sprite icon;
         public GameObject prefab;
     }

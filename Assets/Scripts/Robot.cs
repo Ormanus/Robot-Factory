@@ -6,7 +6,6 @@ public abstract class Robot : ScriptableObject
 {
     string robotName;
     int health;
-    public Dictionary<string, int> _resourcecosts = new Dictionary<string, int>();
     public Robot(string name)
     {
         robotName = name;

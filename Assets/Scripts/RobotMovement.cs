@@ -10,10 +10,12 @@ public class RobotMovement : MonoBehaviour
 
     int state = 0;
     Vector2 _target;
+    AnimationController _anim;
 
     private void Awake()
     {
         _target = transform.position;
+        _anim = GetComponent<AnimationController>();
     }
 
     private void Update()
@@ -24,7 +26,7 @@ public class RobotMovement : MonoBehaviour
             {
                 state = 1;
                 _target = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                GetComponent<AnimationController>().SetAnimationState(walkAnimation);
+                _anim.SetAnimationState(walkAnimation);
                 if (targetAnimation != null)
                 {
                     Instantiate(targetAnimation, _target, Quaternion.identity);
@@ -49,13 +51,14 @@ public class RobotMovement : MonoBehaviour
 
     public void SetTarget(Vector2 target)
     {
+        _anim.SetAnimationState(walkAnimation);
         _target = target;
         state = 1;
     }
 
     public void Stop()
     {
-        GetComponent<AnimationController>().Stop();
+        _anim.Stop();
         state = 0;
     }
 }

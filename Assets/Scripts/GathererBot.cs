@@ -5,14 +5,18 @@ using UnityEngine;
 [RequireComponent(typeof(RobotMovement))]
 public class GathererBot : MonoBehaviour
 {
+    public float gatherTime = 5f;
+
     int state = 0; // 0 = idle, 1 = move to resource, 2 = gather resource, 3 = return to base
     GameObject _resourceTarget = null;
     AnimationController _anim;
-    public float gatherTime = 5f;
-    float resourceGatherTimer = 0f;
-    
+    RobotMovement _movement;
+    float _resourceGatherTimer = 0f;
+
     string _resourceName;
     int _resourceAmount;
+
+    GameObject _homeTarget = null;
 
     public AnimationController.AnimationList idleAnimation;
     public AnimationController.AnimationList FightAnimation;
@@ -21,6 +25,8 @@ public class GathererBot : MonoBehaviour
     {
         _anim = GetComponent<AnimationController>();
         _anim.SetAnimationState(idleAnimation);
+
+        _movement = GetComponent<RobotMovement>();
     }
 
     public void SetResourceTarget(GameObject resourceTarget)
@@ -43,7 +49,7 @@ public class GathererBot : MonoBehaviour
                     {
                         Debug.Log("Target found!");
                         _resourceTarget = item.gameObject;
-                        GetComponent<RobotMovement>().SetTarget(_resourceTarget.transform.position);
+                        _movement.SetTarget(_resourceTarget.transform.position);
                         state = 1;
                         break;
                     }
@@ -57,28 +63,71 @@ public class GathererBot : MonoBehaviour
             if (delta.magnitude < 2)
             {
                 Debug.Log("Stopped");
-                GetComponent<RobotMovement>().Stop();
+                _movement.Stop();
                 state = 2;
                 _anim.SetAnimationState(FightAnimation);
             }
         }
         if (state == 2)
         {
-            resourceGatherTimer += Time.deltaTime;
-            if (resourceGatherTimer > gatherTime)
+            _resourceGatherTimer += Time.deltaTime;
+            if (_resourceGatherTimer > gatherTime)
             {
                 var res = _resourceTarget.GetComponent<ResourceSource>();
                 _resourceName = res.resourceName;
                 _resourceAmount = res.TakeResource(15);
-                resourceGatherTimer = 0f;
+                _resourceGatherTimer = 0f;
                 state = 3;
             }
         }
         if (state == 3)
         {
-            // TODO: Find closest building, move
+            if (_homeTarget == null)
+            {
+                FindHome();
+            };
+            if (_homeTarget == null)
+            {
+                _anim.SetAnimationState(idleAnimation);
+                return;
+            }
+            _movement.SetTarget(_homeTarget.transform.position);
+
+            Vector2 delta = (_homeTarget.transform.position - transform.position);
+            if (delta.magnitude < 2f)
+            {
+                Debug.Log("Home reached!");
+                Object.FindObjectOfType<Resources>().GainResouce(_resourceName, _resourceAmount);
+                _homeTarget = null;
+                state = 1;
+            }
+        }
+    }
+
+    void FindHome()
+    {
+        var buildings = GameObject.FindGameObjectsWithTag("playerBuilding");
+        if (buildings.Length == 0)
+        {
+            // No buildings found, idle.
             _anim.SetAnimationState(idleAnimation);
-            Debug.Log("Resources gathered!");
+            return;
+        }
+
+        GameObject closest = null;
+        float dMin = float.MaxValue;
+        for (int i = 0; i < buildings.Length; i++)
+        {
+            float d = (buildings[i].transform.position - transform.position).magnitude;
+            if (d < dMin)
+            {
+                dMin = d;
+                closest = buildings[i];
+            }
+        }
+        if (closest != null)
+        {
+            _homeTarget = closest;
         }
     }
 }

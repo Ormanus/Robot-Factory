@@ -7,6 +7,7 @@ public abstract class Building : MonoBehaviour
     protected string buildingName;
     protected Vector2 dimensions;
     protected int health;
+    public Sprite sprite;
 
     public Building(string name)
     {

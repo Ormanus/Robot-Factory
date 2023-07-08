@@ -6,6 +6,7 @@ public class BatterBot : MonoBehaviour
 {
     public GameObject Wings;
     public GameObject BatObject;
+    RobotMovement robotMovement;
 
     float speed = 2f;
     float chargeDuration = 1f;
@@ -28,15 +29,18 @@ public class BatterBot : MonoBehaviour
     void Start()
     {
         hedgehog = FindObjectOfType<HedgehogController>();
+        robotMovement= GetComponent<RobotMovement>();
+        robotMovement.movementSpeed= speed;
     }
 
     void Move()
     {
         if (hedgehog != null)
         {
+            robotMovement.SetTarget(hedgehog.transform.position);
             Vector3 hedgeHogPosition = new Vector3(hedgehog.transform.position.x, hedgehog.transform.position.y, transform.position.z);
-            transform.position = Vector3.MoveTowards(transform.position, hedgeHogPosition, speed * Time.deltaTime);
-            transform.localEulerAngles = new Vector3(0f, 0f, Vector2.SignedAngle(Vector2.up, hedgeHogPosition - transform.position));
+            //    transform.position = Vector3.MoveTowards(transform.position, hedgeHogPosition, speed * Time.deltaTime);
+            //    transform.localEulerAngles = new Vector3(0f, 0f, Vector2.SignedAngle(Vector2.up, hedgeHogPosition - transform.position));
 
             Wings.transform.localEulerAngles = new Vector3(0, 0, 0);
 
@@ -44,22 +48,25 @@ public class BatterBot : MonoBehaviour
             {
                 state = BatterState.Charging;
                 timeSinceCharging = 0;
+                robotMovement.movementSpeed = speed / 2;
             }
+            //}
         }
     }
-
     void Charge()
     {
+        robotMovement.SetTarget(hedgehog.transform.position);
         timeSinceCharging += Time.deltaTime;
 
-        Vector3 hedgeHogPosition = new Vector3(hedgehog.transform.position.x, hedgehog.transform.position.y, transform.position.z);
-        transform.position = Vector3.MoveTowards(transform.position, hedgeHogPosition, speed / 2 * Time.deltaTime);
-        transform.rotation = Quaternion.FromToRotation(transform.position, hedgeHogPosition - transform.position);
+        //Vector3 hedgeHogPosition = new Vector3(hedgehog.transform.position.x, hedgehog.transform.position.y, transform.position.z);
+        //transform.position = Vector3.MoveTowards(transform.position, hedgeHogPosition, speed / 2 * Time.deltaTime);
+        //transform.rotation = Quaternion.FromToRotation(transform.position, hedgeHogPosition - transform.position);
 
         Wings.transform.localEulerAngles = new Vector3(0, 0, Wings.transform.localEulerAngles.z + 45 / chargeDuration * Time.deltaTime);
 
-        if (timeSinceCharging > chargeDuration) 
+        if (timeSinceCharging > chargeDuration)
         {
+            robotMovement.movementSpeed = 0;
             state = BatterState.Batting;
             timeSinceBatting = 0;
         }
@@ -72,6 +79,7 @@ public class BatterBot : MonoBehaviour
         if (timeSinceBatting > batDuration)
         {
             state = BatterState.Moving;
+            robotMovement.movementSpeed = speed;
         }
     }
 

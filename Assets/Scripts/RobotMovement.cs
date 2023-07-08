@@ -26,7 +26,9 @@ public class RobotMovement : MonoBehaviour
             {
                 state = 1;
                 _target = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                _anim.SetAnimationState(walkAnimation);
+                if (_anim != null ) 
+                    _anim.SetAnimationState(walkAnimation);
+
                 if (targetAnimation != null)
                 {
                     Instantiate(targetAnimation, _target, Quaternion.identity);
@@ -51,14 +53,18 @@ public class RobotMovement : MonoBehaviour
 
     public void SetTarget(Vector2 target)
     {
-        _anim.SetAnimationState(walkAnimation);
+        if (_anim!= null)
+            _anim.SetAnimationState(walkAnimation);
+
         _target = target;
         state = 1;
     }
 
     public void Stop()
     {
-        _anim.Stop();
+        if (_anim != null)
+            _anim.Stop();
+
         state = 0;
     }
 }

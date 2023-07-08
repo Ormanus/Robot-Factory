@@ -11,6 +11,7 @@ public class UnitData : ScriptableObject
         public int padsCost;
         public int electricityCost;
         public int constructionTime;
+        public Sprite icon;
         public GameObject prefab;
     }
 

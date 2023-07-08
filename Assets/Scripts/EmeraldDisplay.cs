@@ -9,6 +9,7 @@ public class EmeraldDisplay : MonoBehaviour
 
     private void Awake()
     {
+        Resources.OnEmeraldGained.AddListener(OnEmerald);
         foreach (var emerald in emeralds)
         {
             emerald.enabled = false;

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public sealed class Resources
 {
@@ -8,6 +9,7 @@ public sealed class Resources
     Dictionary<string, int> _resources = new Dictionary<string, int>();
     public string[] orderEmeralds = new string[7];
 	private static Resources ResourceList;
+	public static UnityEvent<string> OnEmeraldGained = new();
 
 	private Resources() 
 	{
@@ -81,20 +83,9 @@ public sealed class Resources
 			if(orderEmeralds[i] == "")
 			{
 				orderEmeralds[i] = emeraldName;
-				return;
+				OnEmeraldGained?.Invoke(emeraldName);
+                return;
 			}
 		}
-    }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }

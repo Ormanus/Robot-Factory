@@ -14,20 +14,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   units:
   - name: Grabber
-    metalCost: 10
-    padsCost: 5
-    electricityCost: 10
+    resourceCosts: []
     constructionTime: 3
+    icon: {fileID: 1198943335, guid: 351f81907daeff24683ae35811537c39, type: 3}
     prefab: {fileID: 6189938762355410875, guid: 304de2ea104232c449344ffc129b2c56, type: 3}
   - name: Batter
-    metalCost: 50
-    padsCost: 20
-    electricityCost: 100
+    resourceCosts: []
     constructionTime: 5
+    icon: {fileID: 316900924, guid: c10e9a36123ab86428c09bf1e618fcce, type: 3}
     prefab: {fileID: 3036492126011662661, guid: 99ba9efd4b5cca147bcae64c168ec6c4, type: 3}
   - name: Decoy
-    metalCost: 20
-    padsCost: 3
-    electricityCost: 50
+    resourceCosts: []
     constructionTime: 10
+    icon: {fileID: 0}
     prefab: {fileID: 0}

@@ -46,7 +46,7 @@ public class RobotMovement : MonoBehaviour
 
                 if (WaterColliders.IsInWater(transform.position))
                 {
-                    ExplosionFactory.CreateBoom(transform.position, 5f);
+                    ExplosionFactory.CreateBoom(transform.position, 2f);
                     Destroy(gameObject);
                 }
             }

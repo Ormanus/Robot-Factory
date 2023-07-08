@@ -10,6 +10,15 @@ public class SelectBox : MonoBehaviour
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
         spriteRenderer.enabled = false;
+        Selectable.OnSelect.AddListener(OnSelect);
+    }
+
+    void OnSelect(Selectable obj)
+    {
+        if (obj != null)
+        {
+            spriteRenderer.size = obj.size * 1.1f;
+        }
     }
 
     private void Update()

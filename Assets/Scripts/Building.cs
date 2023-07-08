@@ -4,14 +4,22 @@ using UnityEngine;
 
 public abstract class Building : MonoBehaviour
 {
-    protected string buildingName;
     protected Vector2 dimensions;
     protected int health;
-    public Sprite sprite;
+    public bool placed = false;
 
-    public Building(string name)
+    public static List<Building> AllBuildings = new();
+
+    public void Place()
     {
-        buildingName = name;
+        placed = true;
+        AllBuildings.Add(this);
+        GetComponent<SpriteRenderer>().color = Color.white;
+    }
+
+    private void OnDestroy()
+    {
+        AllBuildings.Remove(this);
     }
 
     public int GetHealth()

@@ -2,24 +2,36 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BotFactoryUI : MonoBehaviour
+public class MainBaseUI : MonoBehaviour
 {
     public UnitData unitData;
     public GameObject buttonPrefab;
     public Transform buttonRoot;
-    public TMPro.TextMeshProUGUI queueDisplay;
 
     List<GameObject> _buttonList = new();
 
+    static MainBaseUI _instance;
+
     private void Awake()
     {
+        _instance = this;
         Selectable.OnSelect.AddListener(OnSlect);
         gameObject.SetActive(false);
     }
 
+    public static void Show()
+    {
+        _instance.gameObject.SetActive(true);
+    }
+
+    public static void Hide()
+    {
+        _instance.gameObject.SetActive(false);
+    }
+
     void OnSlect(Selectable obj)
     {
-        if (obj != null && obj.GetComponent<RobotConstructionLine>() != null)
+        if (obj != null && obj.GetComponent<MainBase>() != null)
         {
             gameObject.SetActive(true);
         }
@@ -45,15 +57,6 @@ public class BotFactoryUI : MonoBehaviour
         foreach (var button in _buttonList)
         {
             Destroy(button);
-        }
-    }
-
-    private void FixedUpdate()
-    {
-        if (Selectable.selected.TryGetComponent<RobotConstructionLine>(out var building))
-        {
-            queueDisplay.text = "Queue: " + building.GetQueueString();
-
         }
     }
 }

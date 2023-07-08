@@ -1,3 +1,4 @@
+using Outloud.Common;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,12 +9,12 @@ public class RobotConstructionLine : Building
 
     private UnitData.Unit? _currentlyBuilding;
     private Queue<UnitData.Unit> _queue = new();
-    public RobotConstructionLine(string name) : base(name)
+    private void Awake()
     {
-        dimensions = new Vector2(2, 3);
+        dimensions = new Vector2(2.5f, 2.5f);
         health = 100;
     }
-    
+
     public bool AddRobotToQueue(UnitData.Unit unit)
     {
         foreach(var neededRes in unit.resourceCosts)
@@ -21,6 +22,7 @@ public class RobotConstructionLine : Building
             if(Resources.GetInstance().GetResource(neededRes.resource) < neededRes.cost)
             {
                 Debug.Log("Not enough resources to build robot.");
+                AudioManager.PlaySound("wrong");
                 return false;
             }
         }
@@ -30,6 +32,7 @@ public class RobotConstructionLine : Building
             return true;
         }
         Debug.Log("This building's queue is full.");
+        AudioManager.PlaySound("wrong");
         return false;
     }
 
@@ -37,14 +40,23 @@ public class RobotConstructionLine : Building
     {
         _currentlyBuilding = _queue.Dequeue();
         yield return new WaitForSeconds(_currentlyBuilding.Value.constructionTime);
-        var obj = Instantiate(_currentlyBuilding.Value.prefab, transform.position, Quaternion.identity);   
+        var obj = Instantiate(_currentlyBuilding.Value.prefab, transform.position, Quaternion.identity);
+        _currentlyBuilding = null;
     }
 
     void Update()
     {
-        if (_currentlyBuilding.HasValue && _queue.Count > 0)
+        if (!placed)
+            return;
+
+        if (!_currentlyBuilding.HasValue && _queue.Count > 0)
         {
             StartCoroutine(BuildRobot());
         }
+    }
+
+    public string GetQueueString()
+    {
+        return _queue.Count.ToString() + " / " + maxQueueLength.ToString();
     }
 }

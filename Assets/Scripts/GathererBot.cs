@@ -59,6 +59,11 @@ public class GathererBot : MonoBehaviour
 
         if (state == 1)
         {
+            if (_resourceTarget == null)
+            {
+                state = 3;
+                return;
+            }
             Vector3 delta = (_resourceTarget.transform.position - transform.position);
             if (delta.magnitude < 2)
             {

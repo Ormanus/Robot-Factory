@@ -9,15 +9,11 @@ public class Pylon : Building
 
     float _time;
 
-    public Pylon(string name) : base(name)
-    {
-        dimensions = new Vector2(2, 2);
-        health = 100;
-    }
-
     private void Awake()
     {
-        _time = Time.time;
+        _time = 0f;
+        dimensions = new Vector2(1.2f, 2.5f);
+        health = 100;
     }
 
     public static void AddElectricity()
@@ -27,6 +23,9 @@ public class Pylon : Building
 
     private void Update()
     {
+        if (!placed)
+            return;
+
         _time += Time.deltaTime;
         if (_time > frequency)
         {

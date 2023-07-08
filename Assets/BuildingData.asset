@@ -14,20 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   units:
   - name: Pylon
-    metalCost: 50
-    padsCost: 30
-    electricityCost: 0
+    resourceCosts: []
     constructionTime: 10
-    prefab: {fileID: 0}
+    icon: {fileID: 21300000, guid: d6f0e147fae9ebd4595660b3b8d5d869, type: 3}
+    prefab: {fileID: 1887876012786597422, guid: 7dc4de0c4533f534fb099a34d0b7be88, type: 3}
   - name: Production Line
-    metalCost: 100
-    padsCost: 50
-    electricityCost: 100
+    resourceCosts: []
     constructionTime: 20
-    prefab: {fileID: 0}
-  - name: Turret
-    metalCost: 20
-    padsCost: 3
-    electricityCost: 50
-    constructionTime: 10
-    prefab: {fileID: 0}
+    icon: {fileID: -339294319, guid: 9d71422943deb94438d104f04b93db69, type: 3}
+    prefab: {fileID: 4659620772404547621, guid: 6348cf10308832541a87c0aeceac5dd6, type: 3}

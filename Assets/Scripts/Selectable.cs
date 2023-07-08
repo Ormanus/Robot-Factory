@@ -6,6 +6,7 @@ using UnityEngine.Events;
 public class Selectable : MonoBehaviour
 {
     public string description;
+    public Vector2 size;
 
     public static Selectable selected = null;
     public static UnityEvent<Selectable> OnSelect = new();

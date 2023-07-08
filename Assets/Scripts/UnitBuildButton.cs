@@ -37,10 +37,13 @@ public class UnitBuildButton : MonoBehaviour
 
     public void Build()
     {
-        // TODO: check for a robot factory, add _unit to Q
-        if (Selectable.selected.TryGetComponent<RobotConstructionLine>(out var building))
+        if (Selectable.selected.TryGetComponent<RobotConstructionLine>(out var constLine))
         {
-            building.AddRobotToQueue(_unit);
+            constLine.AddRobotToQueue(_unit);
+        }
+        if (Selectable.selected.TryGetComponent<MainBase>(out var mainBase))
+        {
+            mainBase.PlacementMode(_unit);
         }
     }
 }

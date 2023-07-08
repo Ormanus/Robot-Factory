@@ -1,7 +1,4 @@
 using UnityEngine;
-#if UNITY_EDITOR
-using UnityEditor;
-#endif
 
 [CreateAssetMenu()]
 public class UnitData : ScriptableObject
@@ -25,10 +22,3 @@ public class UnitData : ScriptableObject
 
     public Unit[] units;
 }
-
-
-#if UNITY_EDITOR
-
-
-
-#endif

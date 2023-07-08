@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,12 +7,18 @@ public class BatterBot : MonoBehaviour
 {
     public GameObject Wings;
     public GameObject BatObject;
+
+    Collider2D batCollider;
+    Collider2D hedgehogCollider;
+    Rigidbody2D hedgehogRB;
+
     RobotMovement robotMovement;
 
     float speed = 2f;
     float chargeDuration = 1f;
     float batDuration = 0.5f;
     float chargeDistance = 2f;
+    float knockback = 12f;
 
     float timeSinceBatting = 0f;
     float timeSinceCharging = 0f;
@@ -29,8 +36,11 @@ public class BatterBot : MonoBehaviour
     void Start()
     {
         hedgehog = FindObjectOfType<HedgehogController>();
-        robotMovement= GetComponent<RobotMovement>();
+        robotMovement = GetComponent<RobotMovement>();
         robotMovement.movementSpeed= speed;
+        batCollider = BatObject.transform.GetComponent<Collider2D>();
+        hedgehogCollider = hedgehog.GetComponent<Collider2D>();
+        hedgehogRB = hedgehogCollider.attachedRigidbody;
     }
 
     void Move()
@@ -76,7 +86,18 @@ public class BatterBot : MonoBehaviour
     {
         Wings.transform.localEulerAngles = new Vector3(0, 0, Wings.transform.localEulerAngles.z - 360 / batDuration * Time.deltaTime);
         timeSinceBatting += Time.deltaTime;
-        if (timeSinceBatting > batDuration)
+
+        bool bonked = false;
+
+        if (batCollider.IsTouching(hedgehogCollider))
+        {
+            float angle = BatObject.transform.rotation.eulerAngles.z / 180 * Mathf.PI;
+
+            hedgehogRB.velocity = new Vector2(Mathf.Cos(angle + Mathf.PI / 2), Mathf.Sin(angle + Mathf.PI / 2)) * knockback;
+            bonked = true;
+        }
+
+        if (timeSinceBatting > batDuration || bonked)
         {
             state = BatterState.Moving;
             robotMovement.movementSpeed = speed;

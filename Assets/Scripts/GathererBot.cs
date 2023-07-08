@@ -97,7 +97,7 @@ public class GathererBot : MonoBehaviour
             if (delta.magnitude < 2f)
             {
                 Debug.Log("Home reached!");
-                Object.FindObjectOfType<Resources>().GainResouce(_resourceName, _resourceAmount);
+                Resources.GetInstance().GainResouce(_resourceName, _resourceAmount);
                 _homeTarget = null;
                 state = 1;
             }

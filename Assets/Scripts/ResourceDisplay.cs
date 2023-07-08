@@ -11,7 +11,5 @@ public class ResourceDisplay : MonoBehaviour
     private void FixedUpdate()
     {
         display.text = Resources.GetInstance().GetResource(resourceName).ToString();
-
-        Resources.GetInstance().GainResouce("metal", 0);
     }
 }

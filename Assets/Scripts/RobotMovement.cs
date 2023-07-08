@@ -43,6 +43,12 @@ public class RobotMovement : MonoBehaviour
             {
                 transform.position += delta.normalized * movementSpeed * Time.deltaTime;
                 transform.localEulerAngles = new Vector3(0f, 0f, Vector2.SignedAngle(Vector2.up, delta));
+
+                if (WaterColliders.IsInWater(transform.position))
+                {
+                    ExplosionFactory.CreateBoom(transform.position, 5f);
+                    Destroy(gameObject);
+                }
             }
             else
             {

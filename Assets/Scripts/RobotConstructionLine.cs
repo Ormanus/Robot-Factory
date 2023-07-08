@@ -18,7 +18,7 @@ public class RobotConstructionLine : Building
     {
         foreach(var neededRes in unit.resourceCosts)
         {
-            if(Resources.GetInstance().GetResource(neededRes.Item1) < neededRes.Item2)
+            if(Resources.GetInstance().GetResource(neededRes.resource) < neededRes.cost)
             {
                 Debug.Log("Not enough resources to build robot.");
                 return false;

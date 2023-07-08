@@ -1,13 +1,23 @@
 using UnityEngine;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 [CreateAssetMenu()]
 public class UnitData : ScriptableObject
 {
     [System.Serializable]
+    public struct ResCost
+    {
+        public string resource;
+        public int cost;
+    }
+
+    [System.Serializable]
     public struct Unit
     {
         public string name;
-        public (string, int)[] resourceCosts;
+        public ResCost[] resourceCosts;
         public float constructionTime;
         public Sprite icon;
         public GameObject prefab;
@@ -15,3 +25,10 @@ public class UnitData : ScriptableObject
 
     public Unit[] units;
 }
+
+
+#if UNITY_EDITOR
+
+
+
+#endif

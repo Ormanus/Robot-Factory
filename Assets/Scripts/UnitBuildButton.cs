@@ -27,9 +27,9 @@ public class UnitBuildButton : MonoBehaviour
     {
         for (int i = 0; i < _unit.resourceCosts.Length; i++)
         {
-            if (_unit.resourceCosts[i].Item1 == res)
+            if (_unit.resourceCosts[i].resource == res)
             {
-                return _unit.resourceCosts[i].Item2;
+                return _unit.resourceCosts[i].cost;
             }
         }
         return 0;

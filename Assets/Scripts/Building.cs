@@ -8,6 +8,11 @@ public abstract class Building : MonoBehaviour
     protected Vector2 dimensions;
     protected int health;
 
+    public Building(string name)
+    {
+        buildingName = name;
+    }
+
     public int GetHealth()
     {
         return health;

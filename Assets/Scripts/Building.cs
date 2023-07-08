@@ -24,6 +24,11 @@ public abstract class Building : MonoBehaviour
         this.health -= damage;
     }
 
+    public Vector2 GetDimensions()
+    {
+        return dimensions;
+    }
+
     //If health reaches zero or lower, return true so that the building can be destroyed.
     public bool Terminate()
     {
@@ -35,16 +40,5 @@ public abstract class Building : MonoBehaviour
         {
             return false;
         }
-    }
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }

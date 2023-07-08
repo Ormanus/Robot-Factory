@@ -26,7 +26,9 @@ public class RobotMovement : MonoBehaviour
             {
                 state = 1;
                 _target = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                _anim.SetAnimationState(walkAnimation);
+                if (_anim != null ) 
+                    _anim.SetAnimationState(walkAnimation);
+
                 if (targetAnimation != null)
                 {
                     Instantiate(targetAnimation, _target, Quaternion.identity);
@@ -41,6 +43,12 @@ public class RobotMovement : MonoBehaviour
             {
                 transform.position += delta.normalized * movementSpeed * Time.deltaTime;
                 transform.localEulerAngles = new Vector3(0f, 0f, Vector2.SignedAngle(Vector2.up, delta));
+
+                if (WaterColliders.IsInWater(transform.position))
+                {
+                    ExplosionFactory.CreateBoom(transform.position, 5f);
+                    Destroy(gameObject);
+                }
             }
             else
             {
@@ -51,14 +59,18 @@ public class RobotMovement : MonoBehaviour
 
     public void SetTarget(Vector2 target)
     {
-        _anim.SetAnimationState(walkAnimation);
+        if (_anim!= null)
+            _anim.SetAnimationState(walkAnimation);
+
         _target = target;
         state = 1;
     }
 
     public void Stop()
     {
-        _anim.Stop();
+        if (_anim != null)
+            _anim.Stop();
+
         state = 0;
     }
 }

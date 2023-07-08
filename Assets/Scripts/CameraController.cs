@@ -25,9 +25,9 @@ public class CameraController : MonoBehaviour
         var h = _cam.orthographicSize * 2f;
         var v = h * _cam.aspect;
         _camBounds = new Bounds(_cam.transform.position, new Vector3(v, h));
-        //_mapBounds = tileMap.localBounds;
+        _mapBounds = tileMap.localBounds;
 
-        //MoveToMapBounds();
+        MoveToMapBounds();
     }
 
     private void Update()
@@ -55,7 +55,7 @@ public class CameraController : MonoBehaviour
         }
 
 
-        //MoveToMapBounds();
+        MoveToMapBounds();
     }
 
     void MoveToMapBounds()

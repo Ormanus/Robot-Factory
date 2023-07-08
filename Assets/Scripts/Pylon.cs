@@ -4,25 +4,34 @@ using UnityEngine;
 
 public class Pylon : Building
 {
+    const float frequency = 1.0f;
+    const int amount = 1;
+
+    float _time;
+
     public Pylon(string name) : base(name)
     {
         dimensions = new Vector2(2, 2);
         health = 100;
     }
 
-    public static void AddElectricity()
+    private void Awake()
     {
-        Resources.GetInstance().GainResouce("electricity", 10); 
-    }
-    // Start is called before the first frame update
-    void Start()
-    {
-        
+        _time = Time.time;
     }
 
-    // Update is called once per frame
-    void Update()
+    public static void AddElectricity()
     {
-        
+        Resources.GetInstance().GainResouce("electricity", amount); 
+    }
+
+    private void Update()
+    {
+        _time += Time.deltaTime;
+        if (_time > frequency)
+        {
+            _time -= frequency;
+            AddElectricity();
+        }
     }
 }

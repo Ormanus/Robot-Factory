@@ -95,7 +95,7 @@ public class BatterBot : MonoBehaviour
 
             hedgehogRB.velocity = new Vector2(Mathf.Cos(angle + Mathf.PI / 2), Mathf.Sin(angle + Mathf.PI / 2)) * knockback;
             bonked = true;
-            // TODO: Drop emeralds
+            hedgehog.DropEmeralds();
         }
 
         if (timeSinceBatting > batDuration || bonked)

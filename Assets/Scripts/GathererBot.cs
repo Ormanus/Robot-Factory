@@ -67,8 +67,9 @@ public class GathererBot : MonoBehaviour
                 state = 0;
                 return;
             }
+            _movement.SetTarget(_resourceTarget.transform.position);
             Vector3 delta = (_resourceTarget.transform.position - transform.position);
-            if (delta.magnitude < 2)
+            if (delta.magnitude < 1.2f)
             {
                 Debug.Log("Stopped");
                 _movement.Stop();
@@ -78,6 +79,17 @@ public class GathererBot : MonoBehaviour
         }
         if (state == 2)
         {
+            if (_resourceTarget == null)
+            {
+                state = 0;
+                return;
+            }
+            Vector3 delta = (_resourceTarget.transform.position - transform.position);
+            if (delta.magnitude > 1.2f)
+            {
+                state = 0;
+                return;
+            }
             _resourceGatherTimer += Time.deltaTime;
             if (_resourceGatherTimer > gatherTime)
             {
@@ -102,7 +114,7 @@ public class GathererBot : MonoBehaviour
             _movement.SetTarget(_homeTarget.transform.position);
 
             Vector2 delta = (_homeTarget.transform.position - transform.position);
-            if (delta.magnitude < 2f)
+            if (delta.magnitude < 3f)
             {
                 Debug.Log("Home reached!");
                 Resources.GetInstance().GainResouce(_resourceName, _resourceAmount);

@@ -123,12 +123,14 @@ public class HedgehogController : MonoBehaviour
     {
         if (target == null) { SetState(HedgehogState.Idle); return; }
         rb.velocity = Vector2.MoveTowards(rb.velocity, (target.transform.position - transform.position).normalized * maxSpeed, acceleration * Time.fixedDeltaTime);
+        transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.Euler(new Vector3(0f, 0f, Vector2.SignedAngle(Vector2.up, target.transform.position - transform.position))), Time.fixedDeltaTime * 180);
     }
 
     void Attack()
     {
         if (target == null) { SetState(HedgehogState.Idle); return; }
         rb.velocity = Vector2.MoveTowards(rb.velocity, (target.transform.position - transform.position).normalized * maxSpeed, acceleration / 2 * Time.fixedDeltaTime);
+        transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.Euler(new Vector3(0f, 0f, Vector2.SignedAngle(Vector2.up, target.transform.position - transform.position))), Time.fixedDeltaTime * 180);
     }
 
     void FixedUpdate()

@@ -23,6 +23,9 @@ public class HedgehogController : MonoBehaviour
     const float jumpDuration = 1f;
     const float attackDist = 2f;
 
+    const float jumpChargeTime = 0.5f;
+    float timeSinceJumpEnd = 0f;
+
     Rigidbody2D rb;
 
     enum HedgehogState
@@ -154,17 +157,45 @@ public class HedgehogController : MonoBehaviour
 
     void Run()
     {
+        timeSinceJumpEnd += Time.fixedDeltaTime;
         if (target == null) { SetState(HedgehogState.Idle); return; }
         rb.velocity = Vector2.MoveTowards(rb.velocity, (target.transform.position - transform.position).normalized * maxSpeed, acceleration * Time.fixedDeltaTime);
         transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.Euler(new Vector3(0f, 0f, Vector2.SignedAngle(Vector2.up, target.transform.position - transform.position))), Time.fixedDeltaTime * 180);
 
-        if (Dist2D(target.transform.position, transform.position) < attackDist)
+        if (Dist2D(target.transform.position, transform.position) < attackDist && timeSinceJumpEnd > jumpChargeTime)
         {
             StartJump();
         }
         if (WaterColliders.IsInWater(transform.position))
         {
             StartJump();
+        }
+    }
+
+    private void CheckJumpCollisions()
+    {
+        Collider2D collider = GetComponent<Collider2D>();
+        // Robots
+        foreach (RobotMovement robotMovement in FindObjectsByType<RobotMovement>(FindObjectsSortMode.None))
+        {
+            if (collider.IsTouching(robotMovement.GetComponent<Collider2D>()))
+            {
+                Debug.Log("Boom");
+                ExplosionFactory.CreateBoom(robotMovement.transform.position, 2f);
+                Destroy(robotMovement.gameObject);
+            }
+        }
+
+        // Emeralds
+        foreach (ResourceSource emerald in FindObjectsByType<ResourceSource>(FindObjectsSortMode.None))
+        {
+            if (emerald.resourceName.StartsWith("emerald"))
+            {
+                if (collider.IsTouching(emerald.GetComponent<Collider2D>()))
+                {
+                    CollectEmerald(emerald.gameObject);
+                }
+            }
         }
     }
 
@@ -178,20 +209,12 @@ public class HedgehogController : MonoBehaviour
             transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.Euler(new Vector3(0f, 0f, Vector2.SignedAngle(Vector2.up, target.transform.position - transform.position))), Time.fixedDeltaTime * 180);
         }
 
-        Collider2D collider = GetComponent<Collider2D>();
-        foreach (RobotMovement robotMovement in FindObjectsByType<RobotMovement>(FindObjectsSortMode.None))
-        {
-            if (collider.IsTouching(robotMovement.GetComponent<Collider2D>()))
-            {
-                Debug.Log("Boom");
-                ExplosionFactory.CreateBoom(robotMovement.transform.position, 2f);
-                Destroy(robotMovement.gameObject);
-            }
-        }
+        CheckJumpCollisions();
 
         if (timeSinceJump > jumpDuration)
         {
             SetState(HedgehogState.Run);
+            timeSinceJumpEnd = 0;
         }
     }
 

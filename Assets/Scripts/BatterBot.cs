@@ -15,7 +15,7 @@ public class BatterBot : MonoBehaviour
     RobotMovement robotMovement;
 
     float speed = 2f;
-    float chargeDuration = 1f;
+    float chargeDuration = 0.5f;
     float batDuration = 0.5f;
     float chargeDistance = 2f;
     float knockback = 10f;

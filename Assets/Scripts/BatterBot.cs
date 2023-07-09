@@ -18,7 +18,7 @@ public class BatterBot : MonoBehaviour
     float chargeDuration = 1f;
     float batDuration = 0.5f;
     float chargeDistance = 2f;
-    float knockback = 12f;
+    float knockback = 10f;
 
     float timeSinceBatting = 0f;
     float timeSinceCharging = 0f;

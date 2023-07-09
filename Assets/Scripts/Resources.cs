@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 
 public sealed class Resources
 {
@@ -93,5 +94,20 @@ public sealed class Resources
                 return;
 			}
 		}
+
+		if (GottemAll())
+		{
+			SceneManager.LoadScene("Victory");
+		}
     }
+
+	bool GottemAll()
+	{
+		for (int i = 0; i < orderEmeralds.Length; i++)
+		{
+			if (string.IsNullOrEmpty(orderEmeralds[i]))
+				return false;
+		}
+		return true;
+	}
 }

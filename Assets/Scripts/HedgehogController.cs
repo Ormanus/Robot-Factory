@@ -142,6 +142,8 @@ public class HedgehogController : MonoBehaviour
     {
         SetState(HedgehogState.Attack);
         timeSinceJump = 0;
+        AudioSource source = GetComponent<AudioSource>();
+        if (source != null) { source.Play(); }
     }
 
     void Idle()

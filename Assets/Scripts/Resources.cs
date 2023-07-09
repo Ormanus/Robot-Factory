@@ -13,9 +13,9 @@ public sealed class Resources
 
 	private Resources() 
 	{
-	   _resources.Add("metal", 100);
-       _resources.Add("electricity", 200);
-       _resources.Add("gamepads", 50);
+	   _resources.Add("metal", 200);
+       _resources.Add("electricity", 400);
+       _resources.Add("gamepads", 150);
 	}
 
 	//Singleton implementation.

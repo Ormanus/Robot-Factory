@@ -10,7 +10,8 @@ public class MainBase : Building
     Building _buildingPlaceholder = null;
     private void Awake()
     {
-        dimensions = new Vector2 (3, 3);
+        dimensions = new Vector2 (5, 4);
+        AllBuildings.Add(this);
     }
 
 

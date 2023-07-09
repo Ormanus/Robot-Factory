@@ -16,6 +16,7 @@ public class HedgehogController : MonoBehaviour
     const float BaseWeight = 1.0f;
     const float EmeraldWeight = 1.5f;
     const float EnemyWeight = 2.5f;
+    const float ReactionDist = 10f;
 
     const float maxSpeed = 2.0f;
     const float jumpSpeed = 3.0f;
@@ -26,6 +27,7 @@ public class HedgehogController : MonoBehaviour
 
     const float jumpChargeTime = 0.5f;
     float timeSinceJumpEnd = 0f;
+
 
     Rigidbody2D rb;
 
@@ -102,7 +104,11 @@ public class HedgehogController : MonoBehaviour
 
         foreach (RobotMovement robot in FindObjectsByType<RobotMovement>(FindObjectsSortMode.None))
         {
-            float weight = Dist2D(transform.position, robot.transform.position) * EnemyWeight;
+            float dist = Dist2D(transform.position, robot.transform.position);
+            if (dist > ReactionDist)
+                continue;
+
+            float weight = dist * EnemyWeight;
             if (robot.GetComponent<DecoyBot>() != null ) { weight *= BaseWeight / EnemyWeight; }
 
             if (!hasTarget || weight < minWeight) 
@@ -131,7 +137,11 @@ public class HedgehogController : MonoBehaviour
         // Base
         foreach (MainBase mainBase in FindObjectsByType<MainBase>(FindObjectsSortMode.None))
         {
-            float weight = Dist2D(transform.position, mainBase.transform.position) * BaseWeight;
+            float dist = Dist2D(transform.position, mainBase.transform.position);
+            if (dist > ReactionDist)
+                continue;
+
+            float weight = dist * BaseWeight;
             if (!hasTarget || weight < minWeight)
             {
                 hasTarget = true;

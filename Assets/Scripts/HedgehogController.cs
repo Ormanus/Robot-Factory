@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using UnityEngine.SceneManagement;
 
 public class HedgehogController : MonoBehaviour
 {
@@ -196,6 +197,16 @@ public class HedgehogController : MonoBehaviour
                 {
                     CollectEmerald(emerald.gameObject);
                 }
+            }
+        }
+
+        // Main Base
+        foreach (MainBase mainBase in FindObjectsByType<MainBase>(FindObjectsSortMode.None))
+        {
+            if (collider.IsTouching(mainBase.GetComponent<Collider2D>()))
+            {
+                // L + Ratio + Skill issue + RIPBOZO
+                SceneManager.LoadScene("Game Over");
             }
         }
     }

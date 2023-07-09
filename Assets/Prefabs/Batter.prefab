@@ -179,12 +179,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4395139ba8dfd884fa95ce86256a0421, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movementSpeed: 1
+  movementSpeed: 2
   targetAnimation: {fileID: 4903672275750375620, guid: ae8fdde733cb6c4479bf3118e802e17f, type: 3}
   walkAnimation:
     sprites:
     - {fileID: 0}
     animationDuration: 0.2
+  OnDestinationReached:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &7615185424698397180
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -7,7 +7,7 @@ using UnityEngine.Events;
 [RequireComponent(typeof(RobotMovement))]
 public class GathererBot : MonoBehaviour
 {
-    public float gatherTime = 5f;
+    public float gatherTime = 3f;
     public Transform emeraldCarrier;
 
     int state = 0; // 0 = idle, 1 = move to resource, 2 = gather resource, 3 = return to base

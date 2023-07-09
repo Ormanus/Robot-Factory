@@ -975,6 +975,9 @@ MonoBehaviour:
   - audioID: newBuilding
     clips:
     - {fileID: 8300000, guid: a4fad37c76fb5fc4696bbce6504caf74, type: 3}
+  - audioID: wrong
+    clips:
+    - {fileID: 8300000, guid: 199c089185c882140b4e1819ed68f19c, type: 3}
   Source: {fileID: 592908480}
 --- !u!1 &671587852
 GameObject:

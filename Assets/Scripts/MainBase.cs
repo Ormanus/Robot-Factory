@@ -16,8 +16,22 @@ public class MainBase : Building
 
     public void PlacementMode(UnitData.Unit building)
     {
-        MainBaseUI.Hide();
+
+        foreach (var neededRes in building.resourceCosts)
+        {
+            if (Resources.GetInstance().GetResource(neededRes.resource) < neededRes.cost)
+            {
+                Debug.Log("Not enough resources to build building.");
+                AudioManager.PlaySound("wrong");
+                return;
+            }
+        }
+        foreach (var neededRes in building.resourceCosts)
+        {
+            Resources.GetInstance().ConsumeResouce(neededRes.resource, neededRes.cost);
+        }
         _buildingPlaceholder = Instantiate(building.prefab).GetComponent<Building>();
+        MainBaseUI.Hide();
     }
 
     private void Update()

@@ -30,6 +30,10 @@ public class RobotConstructionLine : Building
         }
         if (_queue.Count < maxQueueLength)
         {
+            foreach (var neededRes in unit.resourceCosts)
+            {
+                Resources.GetInstance().ConsumeResouce(neededRes.resource, neededRes.cost);
+            }
             _queue.Enqueue(unit);
             return true;
         }

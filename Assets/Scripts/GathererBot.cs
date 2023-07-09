@@ -1,11 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 [RequireComponent(typeof(RobotMovement))]
 public class GathererBot : MonoBehaviour
 {
     public float gatherTime = 5f;
+    public Transform emeraldCarrier;
 
     int state = 0; // 0 = idle, 1 = move to resource, 2 = gather resource, 3 = return to base
     GameObject _resourceTarget = null;
@@ -16,10 +18,14 @@ public class GathererBot : MonoBehaviour
     string _resourceName;
     int _resourceAmount;
 
+    GameObject _emerald;
+
     GameObject _homeTarget = null;
 
     public AnimationController.AnimationList idleAnimation;
     public AnimationController.AnimationList FightAnimation;
+
+    public static UnityEvent OnResourceGathered = new();
 
     private void Awake()
     {
@@ -37,8 +43,21 @@ public class GathererBot : MonoBehaviour
         _resourceTarget = resourceTarget;
     }
 
+    private void OnDestroy()
+    {
+        if (_emerald != null)
+        {
+            _emerald.GetComponent<Selectable>().enabled = true;
+        }
+    }
+
     private void Update()
     {
+        if (_emerald != null)
+        {
+            _emerald.transform.position = emeraldCarrier.position;
+        }
+
         if (Input.GetMouseButtonDown(1)) 
         {
             if (Selectable.selected == GetComponent<Selectable>())
@@ -95,7 +114,19 @@ public class GathererBot : MonoBehaviour
             {
                 var res = _resourceTarget.GetComponent<ResourceSource>();
                 _resourceName = res.resourceName;
-                _resourceAmount = res.TakeResource(15);
+
+                OnResourceGathered?.Invoke();
+
+                if (_resourceName.Contains("_emerald"))
+                {
+                    _emerald.GetComponent<Selectable>().enabled = false;
+                    _emerald = _resourceTarget;
+                }
+                else
+                {
+                    _resourceAmount = res.TakeResource(15);
+                }
+
                 _resourceGatherTimer = 0f;
                 state = 3;
             }
@@ -117,6 +148,10 @@ public class GathererBot : MonoBehaviour
             if (delta.magnitude < 3f)
             {
                 Debug.Log("Home reached!");
+                if (_emerald != null)
+                {
+                    Destroy(_emerald);
+                }
                 Resources.GetInstance().GainResouce(_resourceName, _resourceAmount);
                 _homeTarget = null;
                 state = 1;

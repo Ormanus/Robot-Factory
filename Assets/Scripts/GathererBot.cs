@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -31,6 +32,7 @@ public class GathererBot : MonoBehaviour
     {
         _movement = GetComponent<RobotMovement>();
         _anim = GetComponent<AnimationController>();
+        _movement.OnDestinationReached.AddListener(DestinationReached);
     }
 
     private void Start()
@@ -51,6 +53,23 @@ public class GathererBot : MonoBehaviour
         }
     }
 
+    void DestinationReached()
+    {
+        if (state == 3)
+        {
+            FindHome();
+            if (_homeTarget != null)
+            {
+                _movement.SetTarget(_homeTarget.transform.position);
+            }
+        }
+        if (state == 1)
+        {
+            if (_resourceTarget != null)
+                _movement.SetTarget(_resourceTarget.transform.position);
+        }
+    }
+
     private void Update()
     {
         if (_emerald != null)
@@ -58,7 +77,7 @@ public class GathererBot : MonoBehaviour
             _emerald.transform.position = emeraldCarrier.position;
         }
 
-        if (Input.GetMouseButtonDown(1)) 
+        if (Input.GetMouseButtonDown(1) && state != 3) 
         {
             if (Selectable.selected == GetComponent<Selectable>())
             {
@@ -81,12 +100,11 @@ public class GathererBot : MonoBehaviour
 
         if (state == 1)
         {
-            if (_resourceTarget == null)
+            if (_resourceTarget == null || _resourceTarget.IsDestroyed())
             {
                 state = 0;
                 return;
             }
-            _movement.SetTarget(_resourceTarget.transform.position);
             Vector3 delta = (_resourceTarget.transform.position - transform.position);
             if (delta.magnitude < 1.2f)
             {
@@ -128,21 +146,30 @@ public class GathererBot : MonoBehaviour
                 }
 
                 _resourceGatherTimer = 0f;
+                FindHome();
                 state = 3;
+                _movement.SetTarget(_homeTarget.transform.position);
             }
         }
         if (state == 3)
         {
+            if (_homeTarget != null && _homeTarget.IsDestroyed())
+            {
+                _homeTarget = null;
+            }
             if (_homeTarget == null)
             {
                 FindHome();
-            };
-            if (_homeTarget == null)
-            {
-                _anim.SetAnimationState(idleAnimation);
-                return;
+                if (_homeTarget != null)
+                {
+                    _movement.SetTarget(_homeTarget.transform.position);
+                }
+                else
+                {
+                    _anim.SetAnimationState(idleAnimation);
+                    return;
+                }
             }
-            _movement.SetTarget(_homeTarget.transform.position);
 
             Vector2 delta = (_homeTarget.transform.position - transform.position);
             if (delta.magnitude < 3f)

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class RobotMovement : MonoBehaviour
 {
@@ -11,6 +12,8 @@ public class RobotMovement : MonoBehaviour
     int state = 0;
     Vector2 _target;
     AnimationController _anim;
+
+    public UnityEvent OnDestinationReached = new();
 
     private void Awake()
     {
@@ -53,6 +56,7 @@ public class RobotMovement : MonoBehaviour
             else
             {
                 Stop();
+                OnDestinationReached?.Invoke();
             }
         }
     }

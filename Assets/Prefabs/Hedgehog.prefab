@@ -129,7 +129,10 @@ MonoBehaviour:
     - {fileID: -439970644, guid: 249d83dbca84e204d83037ba9e42eeeb, type: 3}
     animationDuration: 0.2
   animationAttack:
-    sprites: []
+    sprites:
+    - {fileID: 98189632, guid: 249d83dbca84e204d83037ba9e42eeeb, type: 3}
+    - {fileID: -1221972535, guid: 249d83dbca84e204d83037ba9e42eeeb, type: 3}
+    - {fileID: -1138928896, guid: 249d83dbca84e204d83037ba9e42eeeb, type: 3}
     animationDuration: 0.2
 --- !u!58 &6571829503243003601
 CircleCollider2D:

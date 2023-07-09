@@ -17,7 +17,11 @@ public class HedgehogController : MonoBehaviour
     const float EnemyWeight = 2.5f;
 
     const float maxSpeed = 2.0f;
+    const float jumpSpeed = 3.0f;
     const float acceleration = 4.0f;
+
+    const float jumpDuration = 1f;
+    const float attackDist = 2f;
 
     Rigidbody2D rb;
 
@@ -36,6 +40,8 @@ public class HedgehogController : MonoBehaviour
 
     Bounds _hedgehogBounds;
     Bounds _mapBounds;
+
+    float timeSinceJump = 0;
 
     void Start()
     {
@@ -132,6 +138,12 @@ public class HedgehogController : MonoBehaviour
         return newTarget;
     }
 
+    void StartJump()
+    {
+        SetState(HedgehogState.Attack);
+        timeSinceJump = 0;
+    }
+
     void Idle()
     {
         if (target != null) { SetState(HedgehogState.Run); }
@@ -143,13 +155,42 @@ public class HedgehogController : MonoBehaviour
         if (target == null) { SetState(HedgehogState.Idle); return; }
         rb.velocity = Vector2.MoveTowards(rb.velocity, (target.transform.position - transform.position).normalized * maxSpeed, acceleration * Time.fixedDeltaTime);
         transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.Euler(new Vector3(0f, 0f, Vector2.SignedAngle(Vector2.up, target.transform.position - transform.position))), Time.fixedDeltaTime * 180);
+
+        if (Dist2D(target.transform.position, transform.position) < attackDist)
+        {
+            StartJump();
+        }
+        if (WaterColliders.IsInWater(transform.position))
+        {
+            StartJump();
+        }
     }
 
     void Attack()
     {
-        if (target == null) { SetState(HedgehogState.Idle); return; }
-        rb.velocity = Vector2.MoveTowards(rb.velocity, (target.transform.position - transform.position).normalized * maxSpeed, acceleration / 2 * Time.fixedDeltaTime);
-        transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.Euler(new Vector3(0f, 0f, Vector2.SignedAngle(Vector2.up, target.transform.position - transform.position))), Time.fixedDeltaTime * 180);
+        timeSinceJump += Time.fixedDeltaTime;
+        //if (target == null) { SetState(HedgehogState.Idle); return; }
+        if (target != null)
+        {
+            rb.velocity = Vector2.MoveTowards(rb.velocity, (target.transform.position - transform.position).normalized * jumpSpeed, acceleration / 2 * Time.fixedDeltaTime);
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.Euler(new Vector3(0f, 0f, Vector2.SignedAngle(Vector2.up, target.transform.position - transform.position))), Time.fixedDeltaTime * 180);
+        }
+
+        Collider2D collider = GetComponent<Collider2D>();
+        foreach (RobotMovement robotMovement in FindObjectsByType<RobotMovement>(FindObjectsSortMode.None))
+        {
+            if (collider.IsTouching(robotMovement.GetComponent<Collider2D>()))
+            {
+                Debug.Log("Boom");
+                ExplosionFactory.CreateBoom(robotMovement.transform.position, 2f);
+                Destroy(robotMovement.gameObject);
+            }
+        }
+
+        if (timeSinceJump > jumpDuration)
+        {
+            SetState(HedgehogState.Run);
+        }
     }
 
     void FixedUpdate()

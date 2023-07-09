@@ -14,12 +14,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   units:
   - name: Pylon
-    resourceCosts: []
+    resourceCosts:
+    - resource: metal
+      cost: 50
+    - resource: gamepads
+      cost: 5
+    - resource: electricity
+      cost: 10
     constructionTime: 10
     icon: {fileID: 21300000, guid: d6f0e147fae9ebd4595660b3b8d5d869, type: 3}
     prefab: {fileID: 1887876012786597422, guid: 7dc4de0c4533f534fb099a34d0b7be88, type: 3}
   - name: Production Line
-    resourceCosts: []
-    constructionTime: 20
+    resourceCosts:
+    - resource: metal
+      cost: 100
+    - resource: gamepads
+      cost: 100
+    - resource: electricity
+      cost: 200
+    constructionTime: 15
     icon: {fileID: -339294319, guid: 9d71422943deb94438d104f04b93db69, type: 3}
     prefab: {fileID: 4659620772404547621, guid: 6348cf10308832541a87c0aeceac5dd6, type: 3}

@@ -15,6 +15,7 @@ public abstract class Building : MonoBehaviour
         placed = true;
         AllBuildings.Add(this);
         GetComponent<SpriteRenderer>().color = Color.white;
+        transform.position += Vector3.forward;
     }
 
     private void OnDestroy()

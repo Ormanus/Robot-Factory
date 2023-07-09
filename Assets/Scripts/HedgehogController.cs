@@ -25,7 +25,7 @@ public class HedgehogController : MonoBehaviour
     const float jumpDuration = 1f;
     const float attackDist = 2f;
 
-    const float jumpChargeTime = 0.5f;
+    const float jumpChargeTime = 1f;
     float timeSinceJumpEnd = 0f;
 
 
@@ -184,6 +184,12 @@ public class HedgehogController : MonoBehaviour
         }
     }
 
+    private void EndJump()
+    {
+        SetState(HedgehogState.Run);
+        timeSinceJumpEnd = 0;
+    }
+
     private void CheckJumpCollisions()
     {
         Collider2D collider = GetComponent<Collider2D>();
@@ -195,6 +201,7 @@ public class HedgehogController : MonoBehaviour
                 Debug.Log("Boom");
                 ExplosionFactory.CreateBoom(robotMovement.transform.position, 2f);
                 Destroy(robotMovement.gameObject);
+                rb.velocity = Vector2.zero;
             }
         }
 
@@ -206,6 +213,7 @@ public class HedgehogController : MonoBehaviour
                 if (collider.IsTouching(emerald.GetComponent<Collider2D>()))
                 {
                     CollectEmerald(emerald.gameObject);
+                    rb.velocity = Vector2.zero;
                 }
             }
         }
@@ -235,8 +243,7 @@ public class HedgehogController : MonoBehaviour
 
         if (timeSinceJump > jumpDuration)
         {
-            SetState(HedgehogState.Run);
-            timeSinceJumpEnd = 0;
+            EndJump();
         }
     }
 

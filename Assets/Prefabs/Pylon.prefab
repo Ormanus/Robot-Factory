@@ -99,7 +99,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a8c7398f81751948bfc5117f81fff3d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  description: Robot construction line
+  description: You don't need to construct additional pylons.
   size: {x: 2, y: 3}
 --- !u!114 &2552401951167896441
 MonoBehaviour:

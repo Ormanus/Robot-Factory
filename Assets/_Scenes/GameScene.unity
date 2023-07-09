@@ -809,7 +809,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a8c7398f81751948bfc5117f81fff3d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  description: This is your main base
+  description: This is your main base. Don't let Audio theHedgehog find it!
   size: {x: 5, y: 4}
 --- !u!114 &512187455
 MonoBehaviour:

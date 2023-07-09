@@ -214,7 +214,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a8c7398f81751948bfc5117f81fff3d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  description: Batter Bot
+  description: Batter Bot. Hits home runs on spinning balls.
   size: {x: 2, y: 2}
 --- !u!58 &8033989327294342247
 CircleCollider2D:

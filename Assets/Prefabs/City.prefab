@@ -47,7 +47,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a8c7398f81751948bfc5117f81fff3d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  description: City
+  description: City. Good source of cheap electronics, such as game pads.
   size: {x: 5, y: 3}
 --- !u!212 &3746296813326270763
 SpriteRenderer:

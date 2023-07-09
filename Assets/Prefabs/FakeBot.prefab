@@ -122,7 +122,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a8c7398f81751948bfc5117f81fff3d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  description: Decoy Bot
+  description: Decoy Dr. Bacon.
   size: {x: 2, y: 2}
 --- !u!58 &8283849568481738558
 CircleCollider2D:

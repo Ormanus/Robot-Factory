@@ -256,6 +256,7 @@ public class HedgehogController : MonoBehaviour
 
         if (emeralds.Count == 7)
         {
+            SceneManager.LoadScene("Game Over");
             // TODO: super audio -> end game
         }
     }

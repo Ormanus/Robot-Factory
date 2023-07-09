@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using UnityEngine;
 
 public class HedgehogController : MonoBehaviour
@@ -9,6 +10,15 @@ public class HedgehogController : MonoBehaviour
     public AnimationController.AnimationList animationIdle;
     public AnimationController.AnimationList animationRun;
     public AnimationController.AnimationList animationAttack;
+
+    const float BaseWeight = 1.0f;
+    const float EmeraldWeight = 1.5f;
+    const float EnemyWeight = 2.5f;
+
+    const float maxSpeed = 2.0f;
+    const float acceleration = 4.0f;
+
+    Rigidbody2D rb;
 
     enum HedgehogState
     {
@@ -21,11 +31,13 @@ public class HedgehogController : MonoBehaviour
 
     List<GameObject> emeralds = new();
 
+    GameObject target;
+
     void Start()
     {
         controller = GetComponent<AnimationController>();
-
         SetState(HedgehogState.Idle);
+        rb = GetComponent<Rigidbody2D>();
     }
 
     void SetState(HedgehogState state)
@@ -47,23 +59,83 @@ public class HedgehogController : MonoBehaviour
         }
     }
 
+    float Dist2D(Vector3 a, Vector3 b)
+    {
+        return (new Vector2(a.x, a.y) - new Vector2(b.x, b.y)).magnitude;
+    }
+
+    GameObject LookForTarget()
+    {
+        bool hasTarget = false;
+        float minWeight = 0;
+        GameObject newTarget = null;
+        // Look for the "nearest" target, certain objects prioritized over others
+
+        foreach (RobotMovement robot in FindObjectsByType<RobotMovement>(FindObjectsSortMode.None))
+        {
+            float weight = Dist2D(transform.position, robot.transform.position) * EnemyWeight;
+            if (!hasTarget || weight < minWeight) 
+            {
+                hasTarget = true;
+                minWeight = weight;
+                newTarget = robot.gameObject;
+            }
+        }
+
+        //Emeralds
+        foreach (ResourceSource emerald in FindObjectsByType<ResourceSource>(FindObjectsSortMode.None))
+        {
+            if (emerald.resourceName.StartsWith("emerald"))
+            { 
+                float weight = Dist2D(transform.position, emerald.transform.position) * EmeraldWeight;
+                if (!hasTarget || weight < minWeight)
+                {
+                    hasTarget = true;
+                    minWeight = weight;
+                    newTarget = emerald.gameObject;
+                }
+            }
+        }
+
+        // Base and fake bases
+        // TODO: Fake Bases
+        foreach (MainBase mainBase in FindObjectsByType<MainBase>(FindObjectsSortMode.None))
+        {
+            float weight = Dist2D(transform.position, mainBase.transform.position) * BaseWeight;
+            if (!hasTarget || weight < minWeight)
+            {
+                hasTarget = true;
+                minWeight = weight;
+                newTarget = mainBase.gameObject;
+            }
+        }
+
+        return newTarget;
+    }
+
     void Idle()
     {
-
+        if (target != null) { SetState(HedgehogState.Run); }
+        rb.velocity = Vector2.MoveTowards(rb.velocity, Vector2.zero, acceleration * Time.fixedDeltaTime);
     }
 
     void Run()
     {
-
+        if (target == null) { SetState(HedgehogState.Idle); return; }
+        rb.velocity = Vector2.MoveTowards(rb.velocity, (target.transform.position - transform.position).normalized * maxSpeed, acceleration * Time.fixedDeltaTime);
+        transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.Euler(new Vector3(0f, 0f, Vector2.SignedAngle(Vector2.up, target.transform.position - transform.position))), Time.fixedDeltaTime * 180);
     }
 
     void Attack()
     {
-
+        if (target == null) { SetState(HedgehogState.Idle); return; }
+        rb.velocity = Vector2.MoveTowards(rb.velocity, (target.transform.position - transform.position).normalized * maxSpeed, acceleration / 2 * Time.fixedDeltaTime);
+        transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.Euler(new Vector3(0f, 0f, Vector2.SignedAngle(Vector2.up, target.transform.position - transform.position))), Time.fixedDeltaTime * 180);
     }
 
-    void Update()
+    void FixedUpdate()
     {
+        target = LookForTarget();
         switch (hedgehogState)
         {
             case HedgehogState.Idle:

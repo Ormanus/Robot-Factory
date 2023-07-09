@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 public class HedgehogController : MonoBehaviour
 {
@@ -33,11 +34,29 @@ public class HedgehogController : MonoBehaviour
 
     GameObject target;
 
+    Bounds _hedgehogBounds;
+    Bounds _mapBounds;
+
     void Start()
     {
         controller = GetComponent<AnimationController>();
         SetState(HedgehogState.Idle);
         rb = GetComponent<Rigidbody2D>();
+
+        Tilemap[] tilemaps = FindObjectsByType<Tilemap>(FindObjectsSortMode.None);
+        Tilemap tilemap = tilemaps[0];
+        foreach (Tilemap map in tilemaps)
+        {
+            if (map.localBounds.size.x > tilemap.localBounds.size.x || map.localBounds.size.y > tilemap.localBounds.size.y)
+            {
+                tilemap = map;
+            }
+        }
+
+        _mapBounds = tilemap.localBounds;
+
+        Collider2D collider2D = rb.GetComponent<Collider2D>();
+        _hedgehogBounds = collider2D.bounds;
     }
 
     void SetState(HedgehogState state)
@@ -135,6 +154,7 @@ public class HedgehogController : MonoBehaviour
 
     void FixedUpdate()
     {
+        MoveToMapBounds();
         target = LookForTarget();
         switch (hedgehogState)
         {
@@ -170,6 +190,30 @@ public class HedgehogController : MonoBehaviour
             emeralds[0].transform.position = transform.position + new Vector3(Random.value - 0.5f, Random.value - 0.5f);
             emeralds[0].SetActive(true);
             emeralds.RemoveAt(0);
+        }
+    }
+
+    void MoveToMapBounds()
+    {
+        _hedgehogBounds.center = transform.position;
+        var minDelta = _hedgehogBounds.min - _mapBounds.min;
+        var maxDelta = _hedgehogBounds.max - _mapBounds.max;
+
+        if (minDelta.x < 0)
+        {
+            transform.position += Vector3.right * -minDelta.x;
+        }
+        if (minDelta.y < 0)
+        {
+            transform.position += Vector3.up * -minDelta.y;
+        }
+        if (maxDelta.x > 0)
+        {
+            transform.position += Vector3.right * -maxDelta.x;
+        }
+        if (maxDelta.y > 0)
+        {
+            transform.position += Vector3.up * -maxDelta.y;
         }
     }
 }

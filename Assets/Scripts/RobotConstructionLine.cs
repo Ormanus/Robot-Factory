@@ -2,10 +2,12 @@ using Outloud.Common;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class RobotConstructionLine : Building
 {
     public int maxQueueLength = 3;
+    public Image progressCircle;
 
     private UnitData.Unit? _currentlyBuilding;
     private Queue<UnitData.Unit> _queue = new();
@@ -39,7 +41,14 @@ public class RobotConstructionLine : Building
     public IEnumerator BuildRobot()
     {
         _currentlyBuilding = _queue.Dequeue();
-        yield return new WaitForSeconds(_currentlyBuilding.Value.constructionTime);
+        float startTime = Time.time;
+        progressCircle.enabled = true;
+        while (Time.time < startTime + _currentlyBuilding.Value.constructionTime)
+        {
+            progressCircle.fillAmount = 1f - (Time.time - startTime) / _currentlyBuilding.Value.constructionTime;
+            yield return null;
+        }
+        progressCircle.enabled = false;
         var obj = Instantiate(_currentlyBuilding.Value.prefab, transform.position, Quaternion.identity);
         _currentlyBuilding = null;
     }

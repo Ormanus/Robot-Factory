@@ -102,6 +102,8 @@ public class HedgehogController : MonoBehaviour
         foreach (RobotMovement robot in FindObjectsByType<RobotMovement>(FindObjectsSortMode.None))
         {
             float weight = Dist2D(transform.position, robot.transform.position) * EnemyWeight;
+            if (robot.GetComponent<DecoyBot>() != null ) { weight *= BaseWeight / EnemyWeight; }
+
             if (!hasTarget || weight < minWeight) 
             {
                 hasTarget = true;
@@ -125,8 +127,7 @@ public class HedgehogController : MonoBehaviour
             }
         }
 
-        // Base and fake bases
-        // TODO: Fake Bases
+        // Base
         foreach (MainBase mainBase in FindObjectsByType<MainBase>(FindObjectsSortMode.None))
         {
             float weight = Dist2D(transform.position, mainBase.transform.position) * BaseWeight;

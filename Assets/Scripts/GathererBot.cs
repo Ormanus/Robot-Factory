@@ -117,10 +117,10 @@ public class GathererBot : MonoBehaviour
 
                 OnResourceGathered?.Invoke();
 
-                if (_resourceName.Contains("_emerald"))
+                if (_resourceName.Contains("emerald_"))
                 {
-                    _emerald.GetComponent<Selectable>().enabled = false;
                     _emerald = _resourceTarget;
+                    _emerald.GetComponent<Selectable>().enabled = false;
                 }
                 else
                 {

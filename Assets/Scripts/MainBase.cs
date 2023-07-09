@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class MainBase : Building
 {
+    public SpriteRenderer buildArea;
+
     Building _buildingPlaceholder = null;
     private void Awake()
     {
@@ -20,6 +22,7 @@ public class MainBase : Building
 
     private void Update()
     {
+        buildArea.enabled = _buildingPlaceholder != null;
         if (_buildingPlaceholder != null)
         {
             if (Input.GetKeyDown(KeyCode.Escape))
@@ -84,6 +87,13 @@ public class MainBase : Building
             if (WaterColliders.IsInWater(corner))
                 return false;
         }
+
+        foreach (var corner in corners)
+        {
+            if (!buildArea.bounds.Contains(corner))
+                return false;
+        }
+
         return true;
     }
 

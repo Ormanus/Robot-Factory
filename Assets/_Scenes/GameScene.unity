@@ -779,6 +779,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   placed: 0
+  buildArea: {fileID: 426383755}
 --- !u!1 &592908479
 GameObject:
   m_ObjectHideFlags: 0

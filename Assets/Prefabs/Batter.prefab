@@ -180,7 +180,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   movementSpeed: 1
-  targetAnimation: {fileID: 0}
+  targetAnimation: {fileID: 4903672275750375620, guid: ae8fdde733cb6c4479bf3118e802e17f, type: 3}
   walkAnimation:
     sprites:
     - {fileID: 0}

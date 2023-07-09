@@ -18,6 +18,7 @@ public class EmeraldDisplay : MonoBehaviour
 
     void OnEmerald(string emeraldName)
     {
+        Debug.Log("Emerald found! : " + emeraldName);
         foreach (var emerald in emeralds)
         {
             if (emerald.name == emeraldName)

@@ -62,6 +62,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   description: Rich iron deposit. Send your gatherer here!
+  size: {x: 3, y: 3}
 --- !u!212 &3746296813326270763
 SpriteRenderer:
   m_ObjectHideFlags: 0

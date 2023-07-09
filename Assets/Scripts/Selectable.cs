@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.EventSystems;
 
 public class Selectable : MonoBehaviour
 {
@@ -14,6 +15,11 @@ public class Selectable : MonoBehaviour
     bool clicking = false;
     private void OnMouseDown()
     {
+        if (EventSystem.current.IsPointerOverGameObject())
+            return;
+        if (MainBase.IsBuilding())
+            return;
+
         clicking = true;
     }
 

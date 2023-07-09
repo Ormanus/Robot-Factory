@@ -47,6 +47,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   description: City
+  size: {x: 5, y: 3}
 --- !u!212 &3746296813326270763
 SpriteRenderer:
   m_ObjectHideFlags: 0

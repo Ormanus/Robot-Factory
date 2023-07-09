@@ -212,6 +212,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   description: Batter Bot
+  size: {x: 2, y: 2}
 --- !u!58 &8033989327294342247
 CircleCollider2D:
   m_ObjectHideFlags: 0

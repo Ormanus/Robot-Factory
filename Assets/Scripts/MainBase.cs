@@ -16,7 +16,6 @@ public class MainBase : Building
     {
         MainBaseUI.Hide();
         _buildingPlaceholder = Instantiate(building.prefab).GetComponent<Building>();
-
     }
 
     private void Update()
@@ -86,5 +85,10 @@ public class MainBase : Building
                 return false;
         }
         return true;
+    }
+
+    public static bool IsBuilding()
+    {
+        return FindObjectOfType<MainBase>()._buildingPlaceholder != null;
     }
 }

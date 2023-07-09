@@ -41,6 +41,12 @@ public sealed class Resources
 
     public bool GainResouce(string res, int amount)
     {
+		if (res.StartsWith("emerald_"))
+		{
+			AddOrderEmerald(res.Replace("emerald_", ""));
+			return true;
+		}
+
         if (_resources.ContainsKey(res))
  		{
    	   		_resources[res] += amount;
@@ -80,7 +86,7 @@ public sealed class Resources
     {
     	for (int i = 0; i < orderEmeralds.Length; i++)
 		{
-			if(orderEmeralds[i] == "")
+			if(string.IsNullOrEmpty(orderEmeralds[i]))
 			{
 				orderEmeralds[i] = emeraldName;
 				OnEmeraldGained?.Invoke(emeraldName);

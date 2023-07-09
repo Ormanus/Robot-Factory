@@ -19,7 +19,8 @@ public class HedgehogController : MonoBehaviour
     }
     HedgehogState hedgehogState;
 
-    // Start is called before the first frame update
+    List<GameObject> emeralds = new();
+
     void Start()
     {
         controller = GetComponent<AnimationController>();
@@ -61,7 +62,6 @@ public class HedgehogController : MonoBehaviour
 
     }
 
-    // Update is called once per frame
     void Update()
     {
         switch (hedgehogState)
@@ -76,6 +76,28 @@ public class HedgehogController : MonoBehaviour
                 Attack();
                 break;
 
+        }
+    }
+
+    void CollectEmerald(GameObject emeraldObject)
+    {
+        emeraldObject.SetActive(false);
+        emeralds.Add(emeraldObject);
+
+        if (emeralds.Count == 7)
+        {
+            // TODO: super audio -> end game
+        }
+    }
+
+    public void DropEmeralds()
+    {
+        // TODO: play cling cling sound
+        while (emeralds.Count > 0)
+        {
+            emeralds[0].transform.position = transform.position + new Vector3(Random.value - 0.5f, Random.value - 0.5f);
+            emeralds[0].SetActive(true);
+            emeralds.RemoveAt(0);
         }
     }
 }

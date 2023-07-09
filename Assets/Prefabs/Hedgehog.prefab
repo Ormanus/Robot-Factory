@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 4413504900073950033}
   - component: {fileID: 6571829503243003601}
   - component: {fileID: 8934112713504086154}
+  - component: {fileID: -6185895557686650700}
   m_Layer: 0
   m_Name: Hedgehog
   m_TagString: Untagged
@@ -192,3 +193,17 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!114 &-6185895557686650700
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 132914632344594785}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a8c7398f81751948bfc5117f81fff3d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  description: Hedgehog
+  size: {x: 2, y: 2}

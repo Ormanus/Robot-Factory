@@ -23,10 +23,13 @@ public class GathererBot : MonoBehaviour
 
     private void Awake()
     {
-        _anim = GetComponent<AnimationController>();
-        _anim.SetAnimationState(idleAnimation);
-
         _movement = GetComponent<RobotMovement>();
+        _anim = GetComponent<AnimationController>();
+    }
+
+    private void Start()
+    {
+        _anim.SetAnimationState(idleAnimation);
     }
 
     public void SetResourceTarget(GameObject resourceTarget)
@@ -61,7 +64,7 @@ public class GathererBot : MonoBehaviour
         {
             if (_resourceTarget == null)
             {
-                state = 3;
+                state = 0;
                 return;
             }
             Vector3 delta = (_resourceTarget.transform.position - transform.position);
